@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="fileUploader">
+<head>
+    <title>File Uploader</title>
+    <link href="bower_components/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" />
+    <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 10px;
+        }
+        div.well, #dropZone{
+            border: solid 1px black;
+            margin: 15px;
+            border-radius: 5px;
+            height: 500px;
+        }
+
+        #dropped{
+            border: solid 1px #3fa841;
+            background: rgba(0, 128, 0, 0.48);
+            padding: 10px;
+            border-radius: 5px;
+            width: -webkit-fit-content;
+            width: fit-content;
+        }
+
+    </style>
+</head>
+<body>
+    <div ng-controller="uploadController as main">
+        <div>
+            <h3>File Upload from Dialog{{main.pulse}}</h3>
+            <form name="form1" method="post" enctype="multipart/form-data" action="http://localhost:63218/api/upload">
+                <div>
+                    <label for="caption">Image Caption</label>
+                    <input name="caption" type="text" />
+                </div>
+                <div>
+                    <label for="image1">Image File</label>
+                    <input name="image1" type="file" />
+                </div>
+                <div>
+                    <input type="submit" value="Submit" />
+                </div>
+            </form>
+            <input type="
+                   file" id="uploadFile" name="uploadFile"   />
+        </div>
+    </div>
+    <div class="col-sm-5"  id="dropZone">
+
+    </div>
+    <div class="well col-sm-5" id="list">
+
+    </div>
+    
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="app/app.js"></script>
+
+    <script>
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            // Great success! All the File APIs are supported.
+            console.log("all good");
+        } else {
+            console.log('The File APIs are not fully supported in this browser.');
+        }
+
+        function handleFileDrop(event) {
+
+            if (event != null) {
+                event.preventDefault();
+            }
+            
+            var f = event.dataTransfer.files[0];
+
+            var output = '<div id="dropped"><strong>' + f.name + '</strong><br /><li>Type: (' + (f.type || 'n/a') + ')</li><li>Size: ' + f.size + ' bytes</li><li>Last modified: ' + (f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a') + '</li></div>';
+            
+            document.getElementById('list').innerHTML = output;
+        }
+
+        document.getElementById('dropZone')
+            .addEventListener('drop', handleFileDrop, false);
+        document.getElementById('dropZone')
+    .addEventListener('dragover', function (event) { event.preventDefault(); event.dataTransfer.effectAllowed = 'copy'; }, false);
+    </script>
+</body>
+</html>
